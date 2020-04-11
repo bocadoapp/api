@@ -29,7 +29,8 @@
     "coverage": "jest --coverage",
     "start:dev": "NODE_ENV=development ts-node src/index.ts",
     "build": "tsc",
-    "dev": "./node_modules/.bin/nodemon"
+    "dev": "./node_modules/.bin/nodemon",
+    "start": "node ./dist"
   },
   "repository": {
     "type": "git",
