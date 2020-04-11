@@ -1,5 +1,5 @@
-import { SchemaComposer } from 'graphql-compose'
+// import { SchemaComposer } from 'graphql-compose'
 
-const composer = new SchemaComposer()
+// const composer = new SchemaComposer()
 
-export default composer.buildSchema()
+// export default composer.buildSchema()

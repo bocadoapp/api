@@ -10,6 +10,9 @@ const app = express()
 connect()
   .then(() => {
     server.applyMiddleware({ app })
+    app.get('/', (req, res) => {
+      return res.json({ bocado: '🥑' })
+    })
     app.get('/blog-deploy', (req, res) => {
       return axios({
         method: 'POST',
