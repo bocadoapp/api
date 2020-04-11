@@ -32,7 +32,7 @@ connect()
         .then(r => res.json(r.data))
         .catch(err => res.status(400).send(err.toString()))
     })
-    app.listen(3000, () => console.log('Server runnning!'))
+    app.listen(process.env.PORT || 3000, () => console.log('Server runnning!'))
     return app
   })
   .catch(e => {
