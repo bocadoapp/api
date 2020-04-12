@@ -55,7 +55,7 @@ router.post('/mailchimp-subscribe', (req, res) => {
     url: `https://us19.api.mailchimp.com/3.0/lists/${listId}/members/`,
     auth: {
       username: 'BocadoApp',
-      password: 'b032a1d05509117bb2f37fcb1aeed295-us19'
+      password: process.env.MAILCHIMP_TOKEN
     },
     data
   })

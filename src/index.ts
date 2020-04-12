@@ -1,6 +1,12 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
+import { resolve } from 'path'
+import { config } from 'dotenv'
+
+if (process.env.NODE_ENV !== 'production') {
+  config({ path: resolve(__dirname, "./.env") })
+}
 
 import { connect } from './mongo'
 import createServer from './graphql/createServer'
