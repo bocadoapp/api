@@ -14,6 +14,8 @@ export interface IIngredient {
   colesterol?: IIngredientAttribute
 }
 
+export type TIngredient = IIngredient & Document
+
 export const SchemaIngredient: Schema = new Schema({
   name: {
     required: true,
@@ -37,4 +39,4 @@ export const SchemaIngredient: Schema = new Schema({
   }
 })
 
-export default model<IIngredient & Document>('Ingredient', SchemaIngredient)
+export default model<TIngredient>('Ingredient', SchemaIngredient)

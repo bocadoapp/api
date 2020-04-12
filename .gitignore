@@ -1,4 +1,5 @@
 scripts/**/*.xml
+scripts/**/*.csv
 .DS_Store
 # Logs
 logs

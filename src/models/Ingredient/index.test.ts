@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Ingredient, { IIngredient } from './index'
+import Ingredient, { TIngredient } from './index'
 import { connect } from '../../mongo'
 
 let db: any
@@ -15,12 +15,12 @@ describe('Ingredient model', () => {
 })
 
 test('should throw for validation', () => {
-  const ingredient: IIngredient = new Ingredient()
+  const ingredient: TIngredient = new Ingredient()
   expect(ingredient.validate).toThrow()
 })
 
 test('should create a user', () => {
-  const ingredient: IIngredient = new Ingredient({
+  const ingredient: TIngredient = new Ingredient({
     name: {
       ca: 'Tomaquet',
       es: 'Tomate',
