@@ -1,38 +1,22 @@
 import express from 'express'
-import axios from 'axios'
+import bodyParser from 'body-parser'
+import cors from 'cors'
 
 import { connect } from './mongo'
 import createServer from './graphql/createServer'
+import routes from './rest'
 
 const server = createServer()
 const app = express()
+const PORT = process.env.PORT || 4000
 
 connect()
   .then(() => {
     server.applyMiddleware({ app })
-    app.get('/', (req, res) => {
-      return res.json({ bocado: '🥑' })
-    })
-    app.post('/blog-deploy', (req, res) => {
-      return axios({
-        method: 'POST',
-        url: 'https://api.travis-ci.org/repo/bocadoapp%2Fblog/requests',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Travis-API-Version': 3,
-          'Authorization': `token ${process.env.TRAVIS_TOKEN}`
-        },
-        data: {
-          request: {
-            branch: "master"
-          }
-        }
-      })
-        .then(r => res.json(r.data))
-        .catch(err => res.status(400).send(err.toString()))
-    })
-    app.listen(process.env.PORT || 3000, () => console.log('Server runnning!'))
+    app.use(bodyParser.json())
+    app.use(cors())
+    app.use('/', routes)
+    app.listen(PORT, () => console.log(`Server runnning on ${PORT}`))
     return app
   })
   .catch(e => {

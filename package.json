@@ -9,9 +9,12 @@
     "@types/node": "^13.11.0",
     "apollo-server-express": "^2.12.0",
     "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "graphql": "^14.6.0",
-    "mongoose": "^5.9.7"
+    "mongoose": "^5.9.7",
+    "xml2json": "^0.12.0"
   },
   "devDependencies": {
     "@types/graphql": "^14.5.0",
