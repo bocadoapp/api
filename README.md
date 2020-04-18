@@ -26,7 +26,7 @@ Assumim que `nodejs>=10` & `npm>=6` estan instal.lats
 - **`/dist`**: Aqui es on va el codi compilat. A heroku es serveixen els arxius d'aqui. En local els de `src`.
 - **`/node_modules`**: Aqui es guarden les dependencies, res a fer-hi.
 - **`/scripts`**: Aqui hi estic guardant processos que corro en local, scrapper d'ingredients, importar a la bd CSVs etc... Res d'aqui es accessible desde REST/graphql
-- **`/src`**: Aqui es on hi va tot el codi de la api/graphql
+- **`/src`**: Aqui es on hi va tot el codi de la api/graphql.
    - **`/src/graphql`**:
    - **`/src/models`**:
    - **`/src/rest`**:
