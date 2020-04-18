@@ -1,5 +1,5 @@
 import { SchemaComposer } from 'graphql-compose'
-import { IngredientQuery, IngredientMutation } from './ingredient'
+import { IngredientQuery, IngredientMutation } from './Ingredient'
 
 const schemaComposer = new SchemaComposer()
 
