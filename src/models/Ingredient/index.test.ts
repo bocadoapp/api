@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import Ingredient, { TIngredient } from './index'
+import { Ingredient, TIngredient } from './index'
 import { connect } from '../../mongo'
 
 let db: any
