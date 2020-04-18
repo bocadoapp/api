@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { connect } from '../../src/mongo'
-import Ingredient, { TIngredient } from '../../src/models/Ingredient'
+import { Ingredient, TIngredient } from '../../src/models/Ingredient'
 
 async function start () {
   await connect()

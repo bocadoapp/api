@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 import { connect } from './mongo'
-import createServer from './graphql/createServer'
+import createServer from './createServer'
 import routes from './rest'
 
 const server = createServer()

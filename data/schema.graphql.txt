@@ -1,0 +1,128 @@
+input _idOperatorsFilterFindManyIngredientInput {
+  gt: MongoID
+  gte: MongoID
+  lt: MongoID
+  lte: MongoID
+  ne: MongoID
+  in: [MongoID]
+  nin: [MongoID]
+}
+
+input CreateOneIngredientInput {
+  name: IngredientNameInput!
+  type: IngredientNameInput!
+  kcal: IngredientKcalInput
+  fat_saturated: IngredientFat_saturatedInput
+  colesterol: IngredientColesterolInput
+}
+
+type CreateOneIngredientPayload {
+  """Created document ID"""
+  recordId: MongoID
+
+  """Created document"""
+  record: Ingredient
+}
+
+input FilterFindManyIngredientInput {
+  name: IngredientNameInput
+  type: IngredientNameInput
+  kcal: IngredientKcalInput
+  fat_saturated: IngredientFat_saturatedInput
+  colesterol: IngredientColesterolInput
+  _id: MongoID
+  _ids: [MongoID]
+
+  """List of *indexed* fields that can be filtered via operators."""
+  _operators: OperatorsFilterFindManyIngredientInput
+  OR: [FilterFindManyIngredientInput!]
+  AND: [FilterFindManyIngredientInput!]
+}
+
+type Ingredient {
+  name: IngredientName
+  type: IngredientName
+  kcal: IngredientKcal
+  fat_saturated: IngredientFat_saturated
+  colesterol: IngredientColesterol
+  _id: MongoID!
+}
+
+type IngredientColesterol {
+  value: Float
+  unit: String
+}
+
+input IngredientColesterolInput {
+  value: Float
+  unit: String
+}
+
+type IngredientFat_saturated {
+  value: Float
+  unit: String
+}
+
+input IngredientFat_saturatedInput {
+  value: Float
+  unit: String
+}
+
+type IngredientKcal {
+  value: Float
+  unit: String
+}
+
+input IngredientKcalInput {
+  value: Float
+  unit: String
+}
+
+type IngredientName {
+  ca: String
+  es: String
+  en: String
+  _id: MongoID
+}
+
+input IngredientNameInput {
+  ca: String
+  es: String
+  en: String
+  _id: MongoID
+}
+
+"""
+The `ID` scalar type represents a unique MongoDB identifier in collection.
+MongoDB by default use 12-byte ObjectId value
+(https://docs.mongodb.com/manual/reference/bson-types/#objectid). But MongoDB
+also may accepts string or integer as correct values for _id field.
+"""
+scalar MongoID
+
+type Mutation {
+  """
+  Create one document with mongoose defaults, setters, hooks and validation
+  """
+  ingredientCreate(record: CreateOneIngredientInput!): CreateOneIngredientPayload
+}
+
+"""For performance reason this type contains only *indexed* fields."""
+input OperatorsFilterFindManyIngredientInput {
+  _id: _idOperatorsFilterFindManyIngredientInput
+}
+
+type Query {
+  ingredientAll(
+    """Filter by fields"""
+    filter: FilterFindManyIngredientInput
+    skip: Int
+    limit: Int = 1000
+    sort: SortFindManyIngredientInput
+  ): [Ingredient]
+}
+
+enum SortFindManyIngredientInput {
+  _ID_ASC
+  _ID_DESC
+}

@@ -1,4 +1,5 @@
 import { Schema, Document, model } from 'mongoose'
+import { composeWithMongoose } from 'graphql-compose-mongoose'
 import { ITranslatedString, SchemaTranslatedString } from '../TranslatedString'
 
 interface IIngredientAttribute {
@@ -16,7 +17,7 @@ export interface IIngredient {
 
 export type TIngredient = IIngredient & Document
 
-export const SchemaIngredient: Schema = new Schema({
+export const IngredientSchema: Schema = new Schema({
   name: {
     required: true,
     type: SchemaTranslatedString
@@ -39,4 +40,6 @@ export const SchemaIngredient: Schema = new Schema({
   }
 })
 
-export default model<TIngredient>('Ingredient', SchemaIngredient)
+export const Ingredient = model<TIngredient>('Ingredient', IngredientSchema)
+
+export const IngredientTC = composeWithMongoose(Ingredient, {})
