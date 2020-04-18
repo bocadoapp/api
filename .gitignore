@@ -3,6 +3,8 @@ scripts/**/*.csv
 scripts/**/*.xls
 scripts/**/*.xlsx
 
+src/addUsers.ts
+
 .DS_Store
 # Logs
 logs
