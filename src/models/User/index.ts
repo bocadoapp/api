@@ -1,13 +1,28 @@
 import { Schema, model, Document } from 'mongoose'
+import { composeWithMongoose } from 'graphql-compose-mongoose'
 
-export interface IUser extends Document {
+export interface IUser {
   name: string,
-  email: string
+  mail: string,
+  password: string
 }
 
-const UserSchema: Schema = new Schema({
-  name: String,
-  email: String
-}, { timestamps: true })
+export type TUser = IUser & Document
 
-export default model('User', UserSchema)
+export const UserSchema: Schema = new Schema({
+  name: {
+    required: true,
+    type: String
+  },
+  mail: {
+    required: true,
+    type: String
+  },
+  password: {
+    required: true,
+    type: String
+  }
+})
+
+export const User = model<TUser>('User', UserSchema)
+export const UserTC = composeWithMongoose(User, {})
