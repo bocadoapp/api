@@ -11,10 +11,12 @@
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dropbox": "^4.0.30",
     "express": "^4.17.1",
     "graphql": "^14.6.0",
     "graphql-compose": "^7.14.1",
     "graphql-compose-mongoose": "^7.3.5",
+    "graphql-upload": "^10.0.0",
     "mongoose": "^5.9.7",
     "xml2json": "^0.12.0"
   },
