@@ -2,7 +2,7 @@ scripts/**/*.xml
 scripts/**/*.csv
 scripts/**/*.xls
 scripts/**/*.xlsx
-
+tmp
 src/addUsers.ts
 
 .DS_Store
