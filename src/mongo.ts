@@ -12,7 +12,9 @@ const defaultOpts = {
   useNewUrlParser: true
 }
 
-mongoose.connect(`mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_URL}/${MONGO_DB}`, defaultOpts)
+const uri = `mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_URL}/${MONGO_DB}`
+
+mongoose.connect(uri, defaultOpts)
 
 export const connect = async () =>
   new Promise((resolve, reject) => {
