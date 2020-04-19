@@ -32,9 +32,9 @@ const FileSchema: Schema = new Schema({
 })
 
 FileSchema.virtual('data').get(function() {
-  // if (process.env.NODE_ENV === 'production') {
-  //   return ''
-  // }
+  if (process.env.NODE_ENV === 'production') {
+    return ''
+  }
   return `data:${this.mimetype};base64,` + readFileSync(join(__dirname, `../../../tmp/bocado/${this.name}`), 'base64')
 })
 
