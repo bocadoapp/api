@@ -15,9 +15,10 @@ UserTC.addResolver({
 })
 
 export const UserQuery = {
-  userById: UserTC.getResolver('findOne')
+  user: UserTC.getResolver('findOne')
 }
 
 export const UserMutation = {
-  login: UserTC.getResolver('login')
+  login: UserTC.getResolver('login'),
+  signup: UserTC.getResolver('createOne')
 }

@@ -3,14 +3,22 @@ import { composeWithMongoose } from 'graphql-compose-mongoose'
 
 export interface IUser {
   name: string,
+  username: string,
   mail: string,
-  password: string
+  password: string,
+  instagramId?: string,
+  facebookId?: string,
+  accessToken: string,
 }
 
 export type TUser = IUser & Document
 
 export const UserSchema: Schema = new Schema({
   name: {
+    required: true,
+    type: String
+  },
+  username: {
     required: true,
     type: String
   },
@@ -21,7 +29,10 @@ export const UserSchema: Schema = new Schema({
   password: {
     required: true,
     type: String
-  }
+  },
+  instagramId: String,
+  facebookId: String,
+  accessToken: String
 })
 
 export const User = model<TUser>('User', UserSchema)

@@ -1,9 +1,10 @@
 import { Ingredient, IngredientTC } from '../models/Ingredient'
 
 export const IngredientQuery = {
-  ingredientAll: IngredientTC.getResolver('findMany')
+  ingredients: IngredientTC.getResolver('findMany'),
+  ingredient: IngredientTC.getResolver('findOne')
 }
 
 export const IngredientMutation = {
-  ingredientCreate: IngredientTC.getResolver('createOne')
+  createIngredient: IngredientTC.getResolver('createOne')
 }
