@@ -18,16 +18,12 @@ export const UserSchema: Schema = new Schema({
     required: true,
     type: String
   },
-  username: {
-    required: true,
-    type: String
-  },
+  username: String,
   mail: {
     required: true,
     type: String
   },
   password: {
-    required: true,
     type: String
   },
   instagramId: String,
