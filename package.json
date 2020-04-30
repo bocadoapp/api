@@ -46,7 +46,7 @@
     "test": "jest --detectOpenHandles",
     "coverage": "jest --coverage",
     "start:dev": "NODE_ENV=development ts-node src/index.ts",
-    "build": "tsc",
+    "build": "NODE_ENV=build tsc",
     "dev": "./node_modules/.bin/nodemon",
     "start": "node ./dist",
     "build-schema": "ts-node ./src/buildSchema.ts"
