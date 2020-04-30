@@ -1,4 +1,4 @@
-import { Ingredient, IngredientTC } from '../models/Ingredient'
+import { IngredientTC } from '../models/Ingredient'
 
 export const IngredientQuery = {
   ingredients: IngredientTC.getResolver('findMany'),
