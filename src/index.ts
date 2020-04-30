@@ -11,7 +11,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 import { connect } from './mongo'
 import schema from './schema'
-import routes from './rest'
+import services from './rest/services'
+import auth from './rest/auth'
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -29,7 +30,9 @@ connect()
     app.use(cors())    
     app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }))
     server.applyMiddleware({ app })
-    app.use('/', routes)
+    app.use('/auth', auth)
+    app.use('/', services)
+    
     app.listen(PORT, () => console.log(`[express] Started on ${PORT}`))
     return app
   })

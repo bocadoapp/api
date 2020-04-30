@@ -43,3 +43,16 @@ export const IngredientSchema: Schema = new Schema({
 export const Ingredient = model<TIngredient>('Ingredient', IngredientSchema)
 
 export const IngredientTC = composeWithMongoose(Ingredient, {})
+
+const findMany = IngredientTC
+  .getResolver('findMany')
+  .addFilterArg({
+    name: 'nameByRegex',
+    type: '[String]',
+    description: 'Search by regex LIKE',
+    query: (query, [locale, value]) => {
+      query['name.ca'] = new RegExp(value, "i")
+    }
+  })
+findMany.name = 'findMany'
+IngredientTC.addResolver(findMany)

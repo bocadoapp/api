@@ -1,5 +1,6 @@
 import { User, UserTC } from '../models/User'
 import { IResolver } from './index'
+import { generateRandomPassword, capitalize } from '../lib/helpers'
 
 UserTC.addResolver({
   kind: 'mutation',
@@ -14,10 +15,27 @@ UserTC.addResolver({
   }
 })
 
+UserTC.wrapResolverResolve('createOne', next => async rp => {
+  if (!rp.args.record.username && rp.args.record.name) {  
+    rp.args.record.username = rp.args.record.name
+      .split(' ')
+      .map(capitalize)
+      .join('')
+      .slice(0, 10)
+  }
+
+  if (!rp.args.record.password) {
+    rp.args.record.password = generateRandomPassword()
+  }
+  
+  return next(rp)
+})
+
 export const UserQuery = {
-  userById: UserTC.getResolver('findOne')
+  user: UserTC.getResolver('findOne')
 }
 
 export const UserMutation = {
-  login: UserTC.getResolver('login')
+  login: UserTC.getResolver('login'),
+  signup: UserTC.getResolver('createOne')
 }
