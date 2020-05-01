@@ -15,7 +15,7 @@ const defaultOpts = {
 
 const uri = process.env.NODE_ENV === 'production'
   ? `mongodb+srv://${MONGO_USER}:${MONGO_PW}@${MONGO_URL}/${MONGO_DB}`
-  : 'mongodb://localhost/bocado'
+  : 'mongodb://localhost:27017/bocado'
 
 mongoose.connect(uri, defaultOpts)
 
