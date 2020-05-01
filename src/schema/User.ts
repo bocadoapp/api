@@ -16,7 +16,7 @@ UserTC.addResolver({
 })
 
 UserTC.wrapResolverResolve('createOne', next => async rp => {
-  if (!rp.args.record.username && rp.args.record.name) {  
+  if (!rp.args.record.username && rp.args.record.name) {
     rp.args.record.username = rp.args.record.name
       .split(' ')
       .map(capitalize)
@@ -27,7 +27,7 @@ UserTC.wrapResolverResolve('createOne', next => async rp => {
   if (!rp.args.record.password) {
     rp.args.record.password = generateRandomPassword()
   }
-  
+
   return next(rp)
 })
 

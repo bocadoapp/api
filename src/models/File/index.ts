@@ -31,7 +31,7 @@ const FileSchema: Schema = new Schema({
   path: String
 })
 
-FileSchema.virtual('data').get(function() {
+FileSchema.virtual('data').get(function () {
   if (process.env.NODE_ENV === 'production') {
     return ''
   }

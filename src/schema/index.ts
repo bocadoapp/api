@@ -1,5 +1,5 @@
 import { SchemaComposer } from 'graphql-compose'
-import { GraphQLUpload } from 'graphql-upload';
+import { GraphQLUpload } from 'graphql-upload'
 
 import { IngredientQuery, IngredientMutation } from './Ingredient'
 import { UserQuery, UserMutation } from './User'
@@ -11,7 +11,7 @@ const upload = schemaComposer.createResolver(FileResolver)
 
 schemaComposer.addTypeDefs(`
   scalar Upload
-`);
+`)
 
 schemaComposer.add(GraphQLUpload)
 

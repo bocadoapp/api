@@ -9,6 +9,7 @@ export interface IUser {
   instagramId?: string,
   facebookId?: string,
   accessToken: string,
+  pic?: string
 }
 
 export type TUser = IUser & Document
@@ -28,7 +29,8 @@ export const UserSchema: Schema = new Schema({
   },
   instagramId: String,
   facebookId: String,
-  accessToken: String
+  accessToken: String,
+  pic: String
 })
 
 export const User = model<TUser>('User', UserSchema)
