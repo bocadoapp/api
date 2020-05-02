@@ -3,7 +3,6 @@ services:
   node:
     build:
       context: ./
-      dockerfile: ./docker/node/Dockerfile
     command: npm run dev
     volumes:
       - .:/usr/app/
