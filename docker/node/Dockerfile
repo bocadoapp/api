@@ -4,6 +4,6 @@ WORKDIR /usr/app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN chmod +x /docker/node/wait
-CMD /docker/node/wait
+RUN chmod +x ./docker/node/wait
+CMD ./docker/node/wait
 CMD [ "npm", "run", "dev" ]
