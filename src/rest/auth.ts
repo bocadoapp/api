@@ -1,14 +1,16 @@
 import express from 'express'
 import passport from 'passport'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
-import Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node'
 
 import { User } from '../models/User'
 import { mailchimpSubscribe } from './services'
 
-const { FB_ID, FB_SECRET } = process.env
+const { FB_ID, FB_SECRET, SENTRY_DSN, NODE_ENV: ENV } = process.env
 const router = express.Router()
 const FORM = 'http://localhost:3000/#/ca/1'
+
+Sentry.init({ dsn: SENTRY_DSN, debug: ENV === 'development' })
 
 passport.use(new FacebookStrategy({
   clientID: FB_ID,
@@ -38,7 +40,7 @@ async (accessToken, refreshToken, profile, done) => {
 
     // add new user to mailchimp
     mailchimpSubscribe({
-      email: user.mail,
+      email: profile.emails[0].value,
       name: `${profile.name.givenName}`,
       surname: `${profile.name.middleName} ${profile.name.familyName}`
     })
