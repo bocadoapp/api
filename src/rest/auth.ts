@@ -1,13 +1,16 @@
 import express from 'express'
 import passport from 'passport'
-import jwt from 'jwt-simple'
-import { Strategy as InstagramStrategy } from 'passport-instagram'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
-import { User } from '../models/User'
+import * as Sentry from '@sentry/node'
 
-const { IG_ID, IG_SECRET, FB_ID, FB_SECRET } = process.env
+import { User } from '../models/User'
+import { mailchimpSubscribe } from './services'
+
+const { FB_ID, FB_SECRET, SENTRY_DSN, NODE_ENV: ENV } = process.env
 const router = express.Router()
 const FORM = 'http://localhost:3000/#/ca/1'
+
+Sentry.init({ dsn: SENTRY_DSN, debug: ENV === 'development' })
 
 passport.use(new FacebookStrategy({
   clientID: FB_ID,
@@ -35,38 +38,17 @@ async (accessToken, refreshToken, profile, done) => {
 
     await user.save()
 
-    return done(null, user.toObject())
-  } catch (err) {
-    return done(err, null)
-  }
-}
-))
-
-passport.use(new InstagramStrategy({
-  clientID: IG_ID,
-  clientSecret: IG_SECRET,
-  callbackURL: `${process.env.PUBLIC_URL}/auth/instagram/callback`
-},
-async (accessToken, refreshToken, profile, done) => {
-  try {
-    const dbUser = await User.findOne({ instagramId: profile.id })
-
-    if (dbUser) {
-      return done(null, dbUser.toObject())
-    }
-
-    const user = new User({
-      name: profile.displayName,
-      username: profile.username,
-      password: 'test',
-      instagramId: profile.id,
-      accessToken
+    // add new user to mailchimp
+    mailchimpSubscribe({
+      email: profile.emails[0].value,
+      name: `${profile.name.givenName}`,
+      surname: `${profile.name.middleName} ${profile.name.familyName}`
     })
-
-    await user.save()
+      .catch(Sentry.captureException)
 
     return done(null, user.toObject())
   } catch (err) {
+    Sentry.captureException(err)
     return done(err, null)
   }
 }
@@ -82,15 +64,6 @@ passport.deserializeUser(function (obj, cb) {
 
 router.use(passport.initialize())
 router.use(passport.session())
-
-router.get('/instagram', passport.authenticate('instagram'))
-router.get(
-  '/instagram/callback',
-  passport.authenticate('instagram', { failureRedirect: '/login' }),
-  (req, res) => {
-    return res.send(jwt.encode(req.user, 'bocado'))
-  }
-)
 
 router.get('/facebook', passport.authenticate('facebook', { scope: 'email' }))
 router.get(

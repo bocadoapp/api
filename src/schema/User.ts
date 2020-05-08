@@ -1,6 +1,7 @@
 import { User, UserTC } from '../models/User'
 import { IResolver } from './index'
 import { generateRandomPassword, capitalize } from '../lib/helpers'
+import { mailchimpSubscribe } from '../rest/services'
 
 UserTC.addResolver({
   kind: 'mutation',
@@ -23,6 +24,11 @@ UserTC.wrapResolverResolve('createOne', next => async rp => {
       .join('')
       .slice(0, 10)
   }
+
+  mailchimpSubscribe({
+    email: rp.args.record.mail,
+    name: rp.args.record.name
+  })
 
   if (!rp.args.record.password) {
     rp.args.record.password = generateRandomPassword()
