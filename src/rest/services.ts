@@ -17,7 +17,7 @@ export const mailchimpSubscribe = async (userData: any, listId = '2686a081fb') =
     throw new Error('Mail is mandatory')
   }
 
-  const data: IMailchimpSubscribePayload = { email_address: userData.email, status: "subscribed" }
+  const data: IMailchimpSubscribePayload = { email_address: userData.email, status: 'subscribed' }
 
   if (userData.name || userData.surname) {
     data.merge_fields = {
@@ -26,7 +26,7 @@ export const mailchimpSubscribe = async (userData: any, listId = '2686a081fb') =
     }
   }
 
-  try{
+  try {
     const response = await axios({
       method: 'POST',
       url: `https://us19.api.mailchimp.com/3.0/lists/${listId}/members/`,
@@ -35,11 +35,11 @@ export const mailchimpSubscribe = async (userData: any, listId = '2686a081fb') =
         password: process.env.MAILCHIMP_TOKEN
       },
       data
-  })
+    })
 
     return response
-  } catch(err){
-    throw new Error(err.response.data.title + " " + err.response.data.detail)
+  } catch (err) {
+    throw new Error(err.response.data.title + ' ' + err.response.data.detail)
   }
 }
 
@@ -53,13 +53,13 @@ router.post('/blog-deploy', (req, res) =>
     url: 'https://api.travis-ci.org/repo/bocadoapp%2Fblog/requests',
     headers: {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      Accept: 'application/json',
       'Travis-API-Version': 3,
-      'Authorization': `token ${process.env.TRAVIS_TOKEN}`
+      Authorization: `token ${process.env.TRAVIS_TOKEN}`
     },
     data: {
       request: {
-        branch: "master"
+        branch: 'master'
       }
     }
   })
@@ -67,16 +67,16 @@ router.post('/blog-deploy', (req, res) =>
     .catch(err => res.status(400).send(err.toString())))
 
 router.post('/mailchimp-subscribe', (req, res) => {
-  let userData = {
+  const userData = {
     email: req.body.mail,
     name: req.body.name,
     surname: req.body.surname
   }
 
-  try{
+  try {
     mailchimpSubscribe(userData)
-    res.status(200).send({status: 'OK'})
-  } catch(err){
+    res.status(200).send({ status: 'OK' })
+  } catch (err) {
     return res.status(err.status).send(err.toString())
   }
 })
