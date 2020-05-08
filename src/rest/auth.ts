@@ -4,6 +4,7 @@ import jwt from 'jwt-simple'
 import { Strategy as InstagramStrategy } from 'passport-instagram'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { User } from '../models/User'
+import {mailchimpSubscribe} from './services';
 
 const { IG_ID, IG_SECRET, FB_ID, FB_SECRET } = process.env
 const router = express.Router()
@@ -34,6 +35,18 @@ async (accessToken, refreshToken, profile, done) => {
     })
 
     await user.save()
+
+    //add new user to mailchimp
+    let userData = {
+      email: user.mail,
+      name: `${profile.name.givenName}`,
+      surname: `${profile.name.middleName} ${profile.name.familyName}`
+    }
+    try{
+      mailchimpSubscribe(userData)
+    } catch(err){
+      //send event to sentry
+    }
 
     return done(null, user.toObject())
   } catch (err) {
