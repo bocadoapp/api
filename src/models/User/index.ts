@@ -6,7 +6,7 @@ export interface IUser {
   username: string,
   mail: string,
   password: string,
-  instagramId?: string,
+  googleId?: string,
   facebookId?: string,
   accessToken: string,
   pic?: string
@@ -27,7 +27,7 @@ export const UserSchema: Schema = new Schema({
   password: {
     type: String
   },
-  instagramId: String,
+  googleId: String,
   facebookId: String,
   accessToken: String,
   pic: String
