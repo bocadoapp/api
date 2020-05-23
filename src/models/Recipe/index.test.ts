@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-import { Recipe, TRecipe } from './index'
+import { Recipe, IRecipe } from './index'
 import { connect } from '../../mongo'
 
 let db: any
@@ -15,12 +15,12 @@ describe('Recipe model', () => {
 })
 
 test('should throw for validation', () => {
-  const recipe: TRecipe = new Recipe()
+  const recipe: IRecipe = new Recipe()
   expect(recipe.validate).toThrow()
 })
 
 test('should create a recipe', () => {
-  const recipe: TRecipe = new Recipe({
+  const recipe: IRecipe = new Recipe({
     name: {
       ca: 'Espaguetis a la carbonara',
       es: 'Espaguetis a la carbonara',
