@@ -17,8 +17,9 @@ UserTC.addResolver({
   args: { mail: 'String!', password: 'String!' },
   resolve: async ({ args, context }: IResolver) => {
     const user = await User.findOne({ mail: args.mail, password: args.password })
-    // Generar token aqui
-    if (!user) return null
+    if (!user) {
+      throw new Error('User not found')
+    }
     return user
   }
 })
