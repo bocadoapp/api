@@ -1,12 +1,12 @@
 import path from 'path'
 import fs from 'fs'
-import { connect } from '../../src/mongo'
-import { Ingredient, TIngredient } from '../../src/models/Ingredient'
+import { connect } from '../../src/mongo'
+import { Ingredient } from '../../src/models/Ingredient'
 
 async function start () {
   await connect()
   const files = fs.readdirSync(path.join(__dirname, './')).filter((f: any) => f.includes('.csv'))
-  
+
   for (const fileIndex in files) {
     const [headers, ...rows] = fs.readFileSync(path.join(__dirname, `./${files[fileIndex]}`), 'utf8')
       .split('\n')
@@ -39,24 +39,19 @@ async function start () {
           value: parseFloat(row[8]),
           unit: row[9]
         }
-      }      
+      }
 
       if (!isNaN(parseFloat(row[10]))) {
         i.colesterol = {
           value: parseFloat(row[10]),
           unit: row[11]
         }
-      }      
+      }
 
       const ingredient = new Ingredient(i)
-
-      try {
-        console.log('saving', row[0], i);
-        await ingredient.save()         
-      } catch (err) {
-        throw err
-        process.exit()
-      }
+      console.log('saving', row[0], i)
+      await ingredient.save()
+      process.exit()
     }
   }
 }

@@ -1,6 +1,7 @@
-import { Schema, Document, model } from 'mongoose'
+import { Schema, Document, model, Types } from 'mongoose'
 import { composeWithMongoose } from 'graphql-compose-mongoose'
-import { ITranslatedString, SchemaTranslatedString } from '../TranslatedString'
+import { TranslatedStringSchema, ITranslatedString } from '../TranslatedString'
+import { IFile } from '../File'
 
 interface IIngredientAttribute {
   value: number,
@@ -11,8 +12,9 @@ export interface IIngredient {
   name: ITranslatedString,
   type: ITranslatedString,
   kcal?: IIngredientAttribute,
-  fat_saturated?: IIngredientAttribute,
-  colesterol?: IIngredientAttribute
+  fatSaturated?: IIngredientAttribute,
+  colesterol?: IIngredientAttribute,
+  media: IFile[]
 }
 
 export type TIngredient = IIngredient & Document
@@ -20,24 +22,28 @@ export type TIngredient = IIngredient & Document
 export const IngredientSchema: Schema = new Schema({
   name: {
     required: true,
-    type: SchemaTranslatedString
+    type: TranslatedStringSchema
   },
   type: {
     required: true,
-    type: SchemaTranslatedString
+    type: TranslatedStringSchema
   },
   kcal: {
     value: Number,
     unit: String
   },
-  fat_saturated: {
+  fatSaturated: {
     value: Number,
     unit: String
   },
   colesterol: {
     value: Number,
-    unit: String    
-  }
+    unit: String
+  },
+  media: [{
+    type: Types.ObjectId,
+    ref: 'File'
+  }]
 })
 
 export const Ingredient = model<TIngredient>('Ingredient', IngredientSchema)
@@ -51,7 +57,7 @@ const findMany = IngredientTC
     type: '[String]',
     description: 'Search by regex LIKE',
     query: (query, [locale, value]) => {
-      query['name.ca'] = new RegExp(value, "i")
+      query[`name.${locale}`] = new RegExp(value, 'i')
     }
   })
 findMany.name = 'findMany'

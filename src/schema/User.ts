@@ -2,6 +2,13 @@ import { User, UserTC } from '../models/User'
 import { IResolver } from './index'
 import { generateRandomPassword, capitalize } from '../lib/helpers'
 import { mailchimpSubscribe } from '../rest/services'
+import { RecipeTC } from '../models/Recipe'
+
+UserTC.addRelation('recipes', {
+  resolver: () => RecipeTC.getResolver('findByIds'),
+  prepareArgs: { _ids: source => source.recipesIds },
+  projection: { recipesIds: 1 }
+})
 
 UserTC.addResolver({
   kind: 'mutation',
