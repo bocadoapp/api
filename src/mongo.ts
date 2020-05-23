@@ -9,8 +9,9 @@ const {
 
 let db: any
 const defaultOpts = {
-  useUnifiedTopology: true, 
-  useNewUrlParser: true
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
+  useCreateIndex: true
 }
 
 const uri = process.env.NODE_ENV === 'production'
@@ -28,7 +29,7 @@ export const connect = async () =>
     db = mongoose.connection
     db.on('error', reject)
     db.once('open', () => {
-      console.log(`[mongo] Connected to ${uri}`);
+      console.log(`[mongo] Connected to ${uri}`)
       resolve(db)
     })
   })
