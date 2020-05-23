@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose'
+import { Schema } from 'mongoose'
 
 export interface ITranslatedString {
   ca: string,
@@ -6,10 +6,8 @@ export interface ITranslatedString {
   en: string
 }
 
-export const SchemaTranslatedString: Schema = new Schema({
-  ca: String,
+export const TranslatedStringSchema: Schema = new Schema({
   es: String,
+  ca: String,
   en: String
 })
-
-export default model<ITranslatedString & Document>('TranslatedString', SchemaTranslatedString)

@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose'
+import { Schema, model, Document, Types } from 'mongoose'
 import { composeWithMongoose } from 'graphql-compose-mongoose'
 
 export interface IUser {
@@ -6,10 +6,12 @@ export interface IUser {
   username: string,
   mail: string,
   password: string,
-  instagramId?: string,
+  googleId?: string,
   facebookId?: string,
   accessToken: string,
-  pic?: string
+  pic?: string,
+  points?: number,
+  recipesIds: string[]
 }
 
 export type TUser = IUser & Document
@@ -19,18 +21,31 @@ export const UserSchema: Schema = new Schema({
     required: true,
     type: String
   },
-  username: String,
+  username: {
+    type: String,
+    unique: true
+  },
   mail: {
     required: true,
+    unique: true,
     type: String
   },
   password: {
     type: String
   },
-  instagramId: String,
+  googleId: String,
   facebookId: String,
   accessToken: String,
-  pic: String
+  pic: String,
+  points: {
+    required: false,
+    type: Number,
+    default: 0
+  },
+  recipesIds: [{
+    type: Types.ObjectId,
+    ref: 'Recipe'
+  }]
 })
 
 export const User = model<TUser>('User', UserSchema)

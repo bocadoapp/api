@@ -3,6 +3,7 @@ import { GraphQLUpload } from 'graphql-upload'
 
 import { IngredientQuery, IngredientMutation } from './Ingredient'
 import { UserQuery, UserMutation } from './User'
+import { RecipeQuery, RecipeMutation } from './Recipe'
 import { FileQuery } from './File'
 import { FileResolver } from '../models/File'
 
@@ -18,12 +19,14 @@ schemaComposer.add(GraphQLUpload)
 schemaComposer.Query.addFields({
   ...IngredientQuery,
   ...UserQuery,
+  ...RecipeQuery,
   ...FileQuery
 })
 
 schemaComposer.Mutation.addFields({
   ...IngredientMutation,
   ...UserMutation,
+  ...RecipeMutation,
   upload
 })
 
