@@ -1,56 +1,69 @@
-import { Schema, Document, model } from 'mongoose'
+import { Types, Schema, Document, model } from 'mongoose'
 import { composeWithMongoose } from 'graphql-compose-mongoose'
-import { ITranslatedString, SchemaTranslatedString } from '../TranslatedString'
-import {IIngredient} from '../Ingredient';
+import { ITranslatedString, TranslatedStringSchema } from '../TranslatedString'
+import { IIngredient } from '../Ingredient'
+import { IFile } from '../File'
 
-interface IIngredientAmount {
+interface IStep {
+  text: string,
+  images: [string],
+  order: number
+}
+
+interface IAmount {
   ingredient: IIngredient,
   amount: number,
   unit: ITranslatedString
 }
 
-export interface IRecipe {
+export interface IRecipe extends Document {
+  userId: string,
   name: ITranslatedString,
   people: number,
-  time: number,
-  //type: ITranslatedString,
-  ingredients: IIngredientAmount[]
+  cookingTime: number,
+  ingredients: IAmount[],
+  steps: IStep[],
+  media: IFile[]
 }
-
-export type TRecipe = IRecipe & Document
 
 export const RecipeSchema: Schema = new Schema({
   name: {
     required: true,
-    type: SchemaTranslatedString
+    type: TranslatedStringSchema
+  },
+  userId: {
+    required: true,
+    type: Types.ObjectId,
+    ref: 'User'
   },
   people: {
-    value: Number,
-    type: SchemaTranslatedString
+    type: Number
   },
-  time: {
-    value: Number,
-    unit: String
+  cookingTime: {
+    required: true,
+    type: Number
   },
   ingredients: [{
+    ingredient: {
+      type: Types.ObjectId,
+      ref: 'Ingredient'
+    },
     value: Number,
     unit: String
+  }],
+  steps: [{
+    text: String,
+    media: [{
+      type: Types.ObjectId,
+      ref: 'File'
+    }],
+    order: Number
+  }],
+  media: [{
+    type: Types.ObjectId,
+    ref: 'File'
   }]
 })
 
-export const Recipe = model<TRecipe>('Recipe', RecipeSchema)
-
+export const Recipe = model<IRecipe>('Recipe', RecipeSchema)
 export const RecipeTC = composeWithMongoose(Recipe, {})
-
-const findMany = RecipeTC
-  .getResolver('findMany')
-  .addFilterArg({
-    name: 'nameByRegex',
-    type: '[String]',
-    description: 'Search by regex LIKE',
-    query: (query, [locale, value]) => {
-      query['name.ca'] = new RegExp(value, "i")
-    }
-  })
-findMany.name = 'findMany'
-RecipeTC.addResolver(findMany)
