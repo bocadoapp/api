@@ -7,8 +7,10 @@ interface IMailchimpMergePayload {
 }
 
 interface IMailchimpSubscribePayload {
-  email_address: string,
   status: string,
+  // eslint-disable-next-line camelcase
+  email_address: string,
+  // eslint-disable-next-line camelcase
   merge_fields?: IMailchimpMergePayload
 }
 
