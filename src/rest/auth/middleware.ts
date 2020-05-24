@@ -36,7 +36,6 @@ export default (provider: string) =>
         name: `${profile.name.givenName}`,
         surname: `${profile.name.middleName} ${profile.name.familyName}`
       })
-        .catch(Sentry.captureException)
 
       return done(null, user.toObject())
     } catch (err) {
