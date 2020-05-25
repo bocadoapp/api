@@ -22,7 +22,7 @@ function parse (str) {
 function query (key, payload) {
   const fname = path.join(__dirname, `./.cache/${key}.xml`)
   if (fs.existsSync(fname)) {
-    console.log('Request', key, 'is already cached');
+    console.log('Request', key, 'is already cached')
     return parse(fs.readFileSync(fname, 'utf8'))
   }
 
@@ -39,15 +39,15 @@ function query (key, payload) {
 
 async function start () {
   const foodValuesIds = Object.values(foodValues)
-  const { food: families } = await query('families', queryFamilies)
-  
+  const { food: families } = await query('families', queryFamilies)
+
   for (const familia in families) {
     const data = []
 
     if (Number(familia) > 0) {
       const { fg_id: id, fg_ori_name: familia_es, fg_eng_name: familia_en } = families[familia]
       const { food: ingredients } = await query(`familia-${id}`, queryByFamilia(Number(id)))
-  
+
       if (ingredients && ingredients.length) {
         for (const i in ingredients) {
           const { f_id: id, f_ori_name: es, f_eng_name: en } = ingredients[i]
@@ -59,23 +59,23 @@ async function start () {
             familia_en: familia_en.replace(/,/gi, ''),
             familia_ca: ''
           }
-  
+
           const { food: { foodvalue } } = await query(`ing-${id}`, queryDetall(Number(id)))
 
           if (foodvalue && foodvalue.length) {
-            const values = foodvalue.filter(r => foodValuesIds.includes(r.c_id))            
+            const values = foodvalue.filter(r => foodValuesIds.includes(r.c_id))
             if (values && values.length) {
               for (const valueIndex in values) {
                 ingredient[`${foodValuesNames[valueIndex]}_value`] = parseFloat(values[valueIndex].best_location, 10)
                 ingredient[`${foodValuesNames[valueIndex]}_unit`] = values[valueIndex].v_unit
               }
-            }            
+            }
           }
-  
+
           data.push(ingredient)
         }
       }
-      
+
       const headers = [
         'es', 'en', 'ca', 'familia_es', 'familia_en', 'familia_ca',
         ...foodValuesNames.map(k => [`${k}_value`, `${k}_unit`])
@@ -84,7 +84,7 @@ async function start () {
       fs.writeFileSync(
         path.join(__dirname, `./${familia_es}.csv`),
         [headers, ...data.map(row => Object.values(row).join(','))].join('\n')
-      )      
+      )
     }
   }
 }

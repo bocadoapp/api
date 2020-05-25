@@ -1,9 +1,17 @@
-import { Ingredient, IngredientTC } from '../models/Ingredient'
+import { IngredientTC } from '../models/Ingredient'
+import { FileTC } from '../models/File'
+
+IngredientTC.addRelation('media', {
+  resolver: () => FileTC.getResolver('findByIds'),
+  prepareArgs: { _ids: source => source.media },
+  projection: { media: 1 }
+})
 
 export const IngredientQuery = {
-  ingredientAll: IngredientTC.getResolver('findMany')
+  ingredients: IngredientTC.getResolver('findMany'),
+  ingredient: IngredientTC.getResolver('findOne')
 }
 
 export const IngredientMutation = {
-  ingredientCreate: IngredientTC.getResolver('createOne')
+  createIngredient: IngredientTC.getResolver('createOne')
 }
