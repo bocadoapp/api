@@ -45,26 +45,33 @@ FileTC.addFields({ data: { type: 'String' } })
 
 export const FileResolver = {
   name: 'upload',
-  type: FileTC,
+  type: [FileTC],
   args: {
-    file: 'Upload'
+    files: '[Upload]'
   },
   resolve: async ({ source, args, context, info }: IResolver) => {
     // pillo el metodo createReadStream
-    const file = await args.file
+    const files = await Promise.all(args.files)
+    const savedFiles = []
+    for (const i in files) {
+      const file: any = files[i]
 
-    // Crido la pujada a s3
-    await upload(file)
+      // Crido la pujada a s3
+      const { Location: url }: any = await upload(file)
 
-    // creo instancia del model File
-    const dbFile = new File({
-      mimetype: file.mimetype,
-      type: file.mimetype.split('/')[1],
-      name: file.filename
-    })
+      // creo instancia del model File
+      const dbFile = new File({
+        mimetype: file.mimetype,
+        type: file.mimetype.split('/')[1],
+        name: file.filename,
+        url
+      })
 
-    // guardo a db
-    await dbFile.save()
-    return dbFile
+      // guardo a db
+      const insertedFile = await dbFile.save()
+      savedFiles.push(insertedFile)
+    }
+
+    return savedFiles
   }
 }
