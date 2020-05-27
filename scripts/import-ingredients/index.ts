@@ -12,6 +12,8 @@ async function start () {
       .split('\n')
       .map((r: any) => r.split(','))
 
+    console.log(`saving ${rows.length} ingredients in: ${files[fileIndex]}`)
+
     for (const rowIndex in rows) {
       const row = rows[rowIndex]
       const i: any = {
@@ -49,11 +51,13 @@ async function start () {
       }
 
       const ingredient = new Ingredient(i)
-      console.log('saving', row[0], i)
+      // console.log('saving', row[0], i)
       await ingredient.save()
-      process.exit()
+      // process.exit()
     }
   }
+
+  process.exit()
 }
 
 start()
