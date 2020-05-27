@@ -17,6 +17,20 @@ if (isProd) {
 
 const s3 = new AWS.S3({ params: { Bucket: S3_BUCKET_NAME } })
 
+export const remove = async (key: string) =>
+  new Promise((resolve, reject) => {
+    s3.deleteObject(
+      { Bucket: S3_BUCKET_NAME, Key: key },
+      (err: any, data: any) => {
+        if (err) {
+          return reject(err)
+        }
+
+        return resolve(data)
+      }
+    )
+  })
+
 export const upload = async (file: any) =>
   new Promise((resolve, reject) => {
     return s3.upload(
@@ -31,6 +45,7 @@ export const upload = async (file: any) =>
         if (err) {
           return reject(err)
         }
+        console.log('S3 upload', data)
         return resolve(data)
       }
     )
