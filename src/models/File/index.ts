@@ -3,7 +3,7 @@ import { join } from 'path'
 import { Document, Schema, model } from 'mongoose'
 import { composeWithMongoose } from 'graphql-compose-mongoose'
 import { IResolver } from '../../schema'
-import { upload } from '../../files'
+import { remove, upload } from '../../files'
 
 export interface IFile {
   type: string,
@@ -12,6 +12,7 @@ export interface IFile {
   name: string,
   url?: string,
   path?: string,
+  key?: string
 }
 
 export type TFile = IFile & Document
@@ -28,7 +29,8 @@ const FileSchema: Schema = new Schema({
   },
   size: Number,
   url: String,
-  path: String
+  path: String,
+  key: String
 })
 
 FileSchema.virtual('data').get(function () {
@@ -42,6 +44,16 @@ const File = model<TFile>('File', FileSchema)
 
 export const FileTC = composeWithMongoose(File, {})
 FileTC.addFields({ data: { type: 'String' } })
+
+FileTC.wrapResolverResolve('removeOne', next => async rp => {
+  const file = await File.findOne({ _id: rp.args.filter._id })
+
+  if (file && file.key) {
+    await remove(file.key)
+  }
+
+  return next(rp)
+})
 
 export const FileResolver = {
   name: 'upload',
@@ -57,14 +69,15 @@ export const FileResolver = {
       const file: any = files[i]
 
       // Crido la pujada a s3
-      const { Location: url }: any = await upload(file)
+      const { Location: url, key }: any = await upload(file)
 
       // creo instancia del model File
       const dbFile = new File({
         mimetype: file.mimetype,
         type: file.mimetype.split('/')[1],
         name: file.filename,
-        url
+        url,
+        key
       })
 
       // guardo a db
