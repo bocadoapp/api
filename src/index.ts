@@ -8,6 +8,7 @@ import { connect } from './mongo'
 import schema from './schema'
 import services from './rest/services'
 import auth from './rest/auth'
+import translations from './rest/translations'
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -26,6 +27,7 @@ connect()
     app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }))
     server.applyMiddleware({ app })
     app.use('/auth', auth)
+    app.use('/translations', translations)
     app.use('/', services)
 
     app.listen(PORT, () => console.log(`[express] Started on ${PORT}`))
