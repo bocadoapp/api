@@ -32,7 +32,7 @@ router.use((err: any, req: Request, res: Response, next: NextFunction) => {
     return next(err)
   }
 
-  const { from } = JSON.parse(req.query.state)
+  const { from } = JSON.parse(req.query.state) as any
   res.redirect(`${from}?errCode=${err.code}&errMessage=${err.errmsg}`)
 })
 
